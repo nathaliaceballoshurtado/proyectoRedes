@@ -26,9 +26,16 @@ post = requests.post('https://intranet-heroku.herokuapp.com/monitoring', json = 
 print (post.status_code)
 
 
+
+
+
+
+
+
+
 ##--------------------------------------------
-keys = ['ID', 'progress', 'downloaded' ,'ETA', 'speedup', 'speeddown', 'ratio', 'status-1', 'name']
-keysAux = ['ID', 'progress', 'downloaded', 'size', 'ETA', 'speedup', 'speeddown', 'ratio', 'status-1', 'status-2', 'status-3', 'name']
+keys = ['ID', 'progress', 'downloaded' ,'unit' , 'time','timeunit', 'speedup', 'speeddown', 'ratio', 'up', 'y', 'status-1', 'name']
+keysAux = ['ID' ,'progress',  'downloaded', 'unit','ETA', 'speedup', 'speeddown', 'ratio', 'status-1',  'name']
 keys2 = ['ID', 'progress', 'downloaded' ,'ETA', 'speedup', 'speeddown', 'ratio', 'status-1', 'name']
 ##--------------------------------------------
 urls = requests.get('https://intranet-heroku.herokuapp.com/consultasDescargas')
@@ -36,8 +43,7 @@ dicUrls = urls.json()
 values = dicUrls.values()
 
 for link in values:
-    print (link)
-    
+  ##  print (link)
     subprocess.check_output(["transmission-remote", '--auth', 'transmission:transmission' , "-a", link])
 ##----------------------------------------------
 def listar (value):
@@ -54,31 +60,44 @@ def hacerURLs():
     datos = []
     while True:
         aux = listar(x)
+        print ("listar: " + str (aux) ) 
         if ((aux.find("Sum:")) != -1)  :
             break
         else:
             x += 1
 
         data = {}
-        if ((aux.find("up & down")) == -1):
+
+      
+        if ((aux.find("Up & Down")) == -1):
             values = aux.split(" ")
-            for i in range (0 , 11): ##0
-                data[keys2[i]] = values[i]
+            print ("values 1\n " )
+            print (str(values))
+            for i in range (0 , 10): 
+                    data[keysAux[i]] = values[i]
+                  
         
 
-        elif (aux.find "None" =! -1):
+        elif ((aux.find ("None")) != -1):
             values = aux.split(" ")
-            for j in range (0,10)  : 
-                data[keys[i]] = values [j]     
+            print ("values 2 \n" )
+            for j in range (0,8)  : 
+                data[keys2[i]] = values [j]   
+                  
 
         else:
-            for j in range (0, 12): ##12
-                data[keysAux[j]] = values[j]
+            values = aux.split(" ")    
+            print ("values 3 \n" ) 
+            for j in range (0, 13): ##12
+                data[keys[j]] = values[j]
         datos.append(data)
-    print (datos)
+        print ( "\n") 
+        print (str (values) + "\n")
+        for key in data :
+            print ( key +": "+  data[key])
     return datos
 
 
-post = requests.post('https://intranet-heroku.herokuapp.com/descargas', json = hacerURLs())
+post = requests.post('https://intranet-heroku.herokuapp.com/estadoDescargas', json = hacerURLs())
 print (post.status_code	)
 

@@ -17,10 +17,10 @@
      <table border = 1>
          <thead>
             <td>id</td>
+            <td>Nombre</td>
             <td>Porcentaje</td>
-            <td>Eta</td>
             <td>Status</td>
-	    <td>Nombre</td>
+	   
          </thead>        
 
          {% for row in rows %}
@@ -29,7 +29,7 @@
                <td>{{row[1]}}</td>
                <td> {{row[2]}}</td>
                <td>{{row[3]}}</td>	
-               <td>{{row[4]}}</td>
+               
             </tr>
          {% endfor %}
       </table>

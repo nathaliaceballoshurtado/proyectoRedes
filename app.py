@@ -69,9 +69,10 @@ def estatusDownload() :
             progress = dic.get('progress')
             ETA = dic.get('ETA')
             status = dic.get('status-1')
-            cur.execute("""INSERT INTO status (id , procentaje, eta, status, name) VALUES ('""" + n+1 + """ ' , ' """
-                        + progress + """ ' , ' """ + ETA + """ ' , ' """
-                        + status + """ ' , ' """+ name + """'  ) """ )
+            print ("\nname  " + str(name) + "\n progress" + str(progress) + "\n eta " + str (ETA) + "\n status "+  str(status) )  
+            cur.execute("""INSERT INTO status (id , procentaje, eta, status, name) VALUES ('""" + str(n+1) + """ ' , ' """
+                        + str(progress) + """ ' , ' """ +str(ETA)  + """ ' , ' """
+                        + str (status) + """ ' , ' """+ str (name) + """'  ) """ )
             cur.execute("""COMMIT""")
 
             n += 1
@@ -115,6 +116,8 @@ def consultarDescarga ():
      cursor.execute("""SELECT * FROM torrent""")
      filas = cursor.fetchall()
      convertirAJson(filas)  
+     cursor.execute("""DELETE FROM torrent""")
+     cursor.execute("""COMMIT""") 
      return convertirAJson(filas) 
 
 if __name__ == '__main__':
